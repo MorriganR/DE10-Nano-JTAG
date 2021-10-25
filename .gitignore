@@ -1,0 +1,16 @@
+db
+incremental_db
+simulation
+.qsys_edit
+greybox_tmp
+
+*.BAK.*
+*.bak
+*.done
+*.smsg
+*.jdi
+*.pin
+*.rpt
+*.qws
+*.summary
+*_defaults.qdf
