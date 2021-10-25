@@ -1,7 +1,10 @@
+.qsys_edit
 db
 incremental_db
+hps_isw_handoff
+output_files
 simulation
-.qsys_edit
+synthesis
 greybox_tmp
 
 *.BAK.*
