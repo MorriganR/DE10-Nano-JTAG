@@ -39,6 +39,7 @@ jobs:
           Q_INST_DIR=/home/runner/work/intelFPGA_lite
           Q_INST_FILE=$( pwd )/$( ls QuartusLiteSetup-*-linux.run )
           chmod +x $Q_INST_FILE
+          chmod +x ../.docker/play-setup.sh
           ../.docker/play-setup.sh $Q_INST_FILE $Q_INST_DIR
           echo "# rem files"
           cd ../
