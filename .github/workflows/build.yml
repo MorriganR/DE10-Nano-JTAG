@@ -15,7 +15,7 @@ jobs:
         qver: [17_595, 20_720]
         example: ['DE10-Nano-JTAG']
       fail-fast: false
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: apt-get install
