@@ -39,7 +39,6 @@ jobs:
           Q_INST_DIR=/home/runner/work/intelFPGA_lite
           Q_INST_FILE=$( pwd )/$( ls QuartusLiteSetup-*-linux.run )
           chmod +x $Q_INST_FILE
-          chmod +x ../.docker/play-setup.sh
           ../.docker/play-setup.sh $Q_INST_FILE $Q_INST_DIR
           echo "# rem files"
           cd ../
@@ -59,7 +58,6 @@ jobs:
           export PATH=${Q_INST_DIR}/quartus/linux64/gnu/:$PATH
           echo "# quartus_sh --version" && quartus_sh --version
           cd /home/runner/work/${{matrix.example}}/${{matrix.example}}/hw/
-          chmod +x ./build_hw.sh
           echo "# pwd" && pwd
           echo "# ./build_hw.sh"
           ./build_hw.sh || :
