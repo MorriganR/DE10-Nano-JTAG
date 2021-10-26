@@ -44,7 +44,7 @@ jobs:
           echo "# rem files"
           cd ../
           rm -rf ./qinst
-      - name: Build ${{matrix.example}} blink
+      - name: Build ${{matrix.example}} HW
         run: |
           export Q_INST_DIR=/home/runner/work/intelFPGA_lite
           export QUARTUS_ROOTDIR=${Q_INST_DIR}/quartus
@@ -58,15 +58,16 @@ jobs:
           export PATH=${Q_INST_DIR}/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/:$PATH
           export PATH=${Q_INST_DIR}/quartus/linux64/gnu/:$PATH
           echo "# quartus_sh --version" && quartus_sh --version
-          cd /home/runner/work/terasic-de10-nano-kit/terasic-de10-nano-kit/tutorials/${{matrix.example}}/
+          cd /home/runner/work/${{matrix.example}}/${{matrix.example}}/hw/
+          chmod +x ./build_hw.sh
           echo "# pwd" && pwd
-          echo "# ./build_example.sh"
-          ./build_example.sh || :
-      - name: Prepare artifact ${{matrix.example}} blink
+          echo "# ./build_hw.sh"
+          ./build_hw.sh || :
+      - name: Prepare artifact ${{matrix.example}}.rbf
         id: push_artifact
-        run: tar -cvzf ${{matrix.example}}_${{matrix.qver}}.tgz ./tutorials/${{matrix.example}}/blink
+        run: tar -cvzf ${{matrix.example}}_${{matrix.qver}}.tgz ./hw/output_files/${{matrix.example}}.rbf
 
-      - name: Push artifact ${{matrix.example}} blink
+      - name: Push artifact ${{matrix.example}}
         uses: actions/upload-artifact@v2.2.4
         with:
           name: ${{matrix.example}}_${{matrix.qver}}.tgz
