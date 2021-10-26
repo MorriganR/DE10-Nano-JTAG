@@ -61,13 +61,10 @@ jobs:
           echo "# pwd" && pwd
           echo "# ./build_hw.sh"
           ./build_hw.sh || :
-      - name: Prepare artifact ${{matrix.example}}.rbf
-        id: push_artifact
-        run: tar -cvzf ${{matrix.example}}_${{matrix.qver}}.tgz ./hw/output_files/${{matrix.example}}.rbf
 
       - name: Push artifact ${{matrix.example}}
         uses: actions/upload-artifact@v2.2.4
         with:
-          name: ${{matrix.example}}_${{matrix.qver}}.tgz
-          path: ./${{matrix.example}}_${{matrix.qver}}.tgz
+          name: ${{matrix.example}}_${{matrix.qver}}_output_files
+          path: ./hw/output_files
           retention-days: 2
