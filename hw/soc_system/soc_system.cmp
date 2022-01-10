@@ -56,6 +56,15 @@
 			hps_0_hps_io_hps_io_gpio_inst_GPIO53  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO53
 			hps_0_hps_io_hps_io_gpio_inst_GPIO54  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO54
 			hps_0_hps_io_hps_io_gpio_inst_GPIO61  : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO61
+			jtag_adc_extram_cpu_clk               : out   std_logic;                                        -- cpu_clk
+			jtag_adc_extram_cpu_reset             : out   std_logic;                                        -- cpu_reset
+			jtag_adc_extram_cpu_address           : out   std_logic_vector(11 downto 0);                    -- cpu_address
+			jtag_adc_extram_cpu_chipselect        : out   std_logic;                                        -- cpu_chipselect
+			jtag_adc_extram_cpu_readdata          : in    std_logic_vector(31 downto 0) := (others => 'X'); -- cpu_readdata
+			jtag_adc_extram_cpu_read              : out   std_logic;                                        -- cpu_read
+			jtag_adc_extram_cpu_writedata         : out   std_logic_vector(31 downto 0);                    -- cpu_writedata
+			jtag_adc_extram_cpu_write             : out   std_logic;                                        -- cpu_write
+			jtag_adc_extram_cpu_byteenable        : out   std_logic_vector(3 downto 0);                     -- cpu_byteenable
 			led_pio_external_connection_export    : out   std_logic_vector(6 downto 0);                     -- export
 			memory_mem_a                          : out   std_logic_vector(14 downto 0);                    -- mem_a
 			memory_mem_ba                         : out   std_logic_vector(2 downto 0);                     -- mem_ba

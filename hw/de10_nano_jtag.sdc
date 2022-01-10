@@ -26,7 +26,22 @@ set_output_delay -clock altera_reserved_tck 3 [get_ports altera_reserved_tdo]
 #**************************************************************
 derive_pll_clocks
 
+# JTAG
+# tck
+set_false_path -from * -to [get_ports {GPIO_1[4]}]
+# tms
+set_false_path -from * -to [get_ports {GPIO_1[5]}]
+# tdi
+set_false_path -from * -to [get_ports {GPIO_1[7]}]
+# tdo
+set_false_path -from [get_ports {GPIO_1[8]}] -to *
 
+set_false_path -from [get_registers "main_unit:mu|main_ram:main_ram|*_delay[*]"] -to *
+set_false_path -from [get_registers "main_unit:mu|main_ram:main_ram|tck_width[*]"] -to *
+set_false_path -from [get_registers "main_unit:mu|main_ram:main_ram|adc_config_*"] -to *
+
+set_false_path -from {main_unit:mu|play_jtag_vector:play_jtag|vector_data[*]} -to {main_unit:mu|jtag_signal_out:jtag_out|vector_data_reg[*]}
+set_false_path -from {main_unit:mu|jtag_signal_out:jtag_out|get_next_data} -to {main_unit:mu|play_jtag_vector:play_jtag|get_next_data_reg[0]}
 
 #**************************************************************
 # Set Clock Latency
@@ -66,7 +81,8 @@ set_false_path -from * -to [get_ports LED[*]]
 set_false_path -from [get_ports KEY[*]] -to *
 set_false_path -from [get_ports SW[*]] -to *
 
-
+set_false_path -from * -to [get_ports ADC_*]
+set_false_path -from [get_ports ADC_*] -to *
 
 #**************************************************************
 # Set Multicycle Path

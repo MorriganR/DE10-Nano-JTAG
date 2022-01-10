@@ -683,8 +683,16 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HPS_USB_NXT
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HPS_USB_STP
 set_global_assignment -name SDC_FILE de10_nano_jtag.sdc
 set_global_assignment -name VERILOG_FILE de10_nano_jtag.v
+set_global_assignment -name VERILOG_FILE main_unit/main_unit.v
+set_global_assignment -name VERILOG_FILE main_unit/main_ram.v
+set_global_assignment -name VERILOG_FILE main_unit/play_jtag_vector.v
+set_global_assignment -name VERILOG_FILE "main_unit/adc _capture.v"
+set_global_assignment -name VERILOG_FILE main_unit/jtag_signal_out.v
 set_global_assignment -name VERILOG_FILE ip/edge_detect/altera_edge_detector.v
 set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
 set_global_assignment -name QIP_FILE ip/altsource_probe/hps_reset.qip
 set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
+set_global_assignment -name QIP_FILE ip/altpll/pll_jtag.qip
+set_global_assignment -name SIP_FILE ip/altpll/pll_jtag.sip
+set_global_assignment -name QIP_FILE ip/ram8x1024/ram8x1024.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
