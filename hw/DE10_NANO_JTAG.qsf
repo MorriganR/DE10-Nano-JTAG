@@ -686,7 +686,7 @@ set_global_assignment -name VERILOG_FILE de10_nano_jtag.v
 set_global_assignment -name VERILOG_FILE main_unit/main_unit.v
 set_global_assignment -name VERILOG_FILE main_unit/main_ram.v
 set_global_assignment -name VERILOG_FILE main_unit/play_jtag_vector.v
-set_global_assignment -name VERILOG_FILE "main_unit/adc _capture.v"
+set_global_assignment -name VERILOG_FILE main_unit/adc_capture.v
 set_global_assignment -name VERILOG_FILE main_unit/jtag_signal_out.v
 set_global_assignment -name VERILOG_FILE ip/edge_detect/altera_edge_detector.v
 set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
