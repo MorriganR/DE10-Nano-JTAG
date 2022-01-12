@@ -63,7 +63,7 @@ end
 
 // adc_sdi
 always @(posedge clk) begin
-  if ((t_cyc_counter[8] == 1'b1) && (t_cyc_counter[7:2] < 6'd7))
+  if ((t_cyc_counter[8] == 1'b1) && (t_cyc_counter[7:2] < 6'd6))
     //adc_sdi = adc_config[adc_ram_addr[0]][t_cyc_counter[4:2]];
     adc_sdi <= adc_config[t_cyc_counter[4:2]];
   else

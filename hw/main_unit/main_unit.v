@@ -143,7 +143,7 @@ adc_capture adc_capture (
   .adc_config_odd(adc_config_odd),//input   [31:0] adc_config_odd,
   .adc_config_even(adc_config_even),//input   [31:0] adc_config_even,
   .adc_start(adc_start),//input adc_start
-  .adc_sequence_one(adc_sequence_one),//input adc_sequence_one
+  .adc_sequence_one(adc_sequence_one)//input adc_sequence_one
 );
 
 jtag_signal_out jtag_out (

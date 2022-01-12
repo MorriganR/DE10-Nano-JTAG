@@ -64,7 +64,7 @@ assign readdata = ( address[11] ) ?
 vector_ram vector_1_ram(
   //cpu
  .clk(clk),
- .address(address),
+ .address(address[9:0]),
  .writedata(writedata),
  .vector_readdata(vector_1_readdata),
  .write(write && vector_1_ram_cs),
@@ -80,7 +80,7 @@ vector_ram vector_1_ram(
 vector_ram vector_2_ram(
   //cpu
  .clk(clk),
- .address(address),
+ .address(address[9:0]),
  .writedata(writedata),
  .vector_readdata(vector_2_readdata),
  .write(write && vector_2_ram_cs),
@@ -96,7 +96,7 @@ vector_ram vector_2_ram(
 adc_ram adc_ram(
   //cpu
   .clk(clk),
-  .address(address),
+  .address(address[9:0]),
   .writedata(writedata),
   .readdata(adc_ram_readdata),
   .write(write && adc_ram_cs),

@@ -266,7 +266,7 @@ soc_system u0(
   .jtag_adc_extram_cpu_read(cpu_read),              // output
   .jtag_adc_extram_cpu_writedata(cpu_writedata),    // output [31:0]
   .jtag_adc_extram_cpu_write(cpu_write),            // output
-  .jtag_adc_extram_cpu_byteenable(cpu_byteenable),  // output [3:0]
+  .jtag_adc_extram_cpu_byteenable(cpu_byteenable)   // output [3:0]
 );
 
 
@@ -296,7 +296,7 @@ main_unit mu(
   .tck(tck),
   .tms(tms),
   .tdi(tdi),
-  .tdo_in(reg_tdo),
+  .tdo_in(reg_tdo)
 );
 defparam mu.J_D_WIDTH = 8;
 defparam mu.J_A_WIDTH = 12;

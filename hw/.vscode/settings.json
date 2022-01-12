@@ -1,0 +1,5 @@
+{
+  "editor.tabSize": 2,
+  "verilog.linting.linter": "iverilog",
+  "verilog.linting.iverilog.arguments": "-y ./main_unit -y ./ip/altpll -y ./ip/ram8x1024 -y ./ip/debounce -y ./ip/altsource_probe -y ./ip/edge_detect -y ./soc_system/synthesis"
+}
