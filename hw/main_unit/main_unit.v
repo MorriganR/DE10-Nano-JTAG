@@ -38,6 +38,7 @@ wire [31:0] adc_start_delay;
 wire [31:0] adc_config_odd;
 wire [31:0] adc_config_even;
 wire adc_start;
+wire adc_sequence_one;
 wire tdo;
 
 wire adc_ram_clk;
@@ -106,6 +107,9 @@ wire [1:0] vector_data;
 wire get_next_data;
 wire data_ready;
 wire wait_state;
+wire [15:0] vector_start;
+wire [15:0] vector_end;
+wire [15:0] vector_number_repeat;
 play_jtag_vector play_jtag(
   .clk(clk),
   .vector_1_addr(vector_1_addr),
