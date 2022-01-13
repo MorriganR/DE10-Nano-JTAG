@@ -39,6 +39,7 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-20.04
     needs: run-tests
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: apt-get install
