@@ -8,6 +8,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  run_tests:
+    name: (draft) Run TB with Icarus Verilog
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: apt-get install
+        run: |
+          sudo apt-get update && sudo apt-get install -y iverilog
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: (draft) Run TB
+        uses: |
+          cd /home/runner/work/DE10-Nano-JTAG/DE10-Nano-JTAG/hw/tb/
+          pwd
+          cp main_unit__adc_capture__tb.vcd bkp.vcd
+          ls -la
+          iverilog -y ../main_unit -o adc_capture main_unit__adc_capture__tb.v
+          vvp adc_capture
+          diff <(sed -e '2d' main_unit__adc_capture__tb.vcd) <(sed -e '2d' bkp.vcd)
+          exit 1
+
+
   build-tutorials-job:
     name: Build ${{matrix.example}} with Quartus-${{matrix.qver}}
     strategy:
@@ -16,6 +39,7 @@ jobs:
         example: ['DE10-Nano-JTAG']
       fail-fast: false
     runs-on: ubuntu-20.04
+    needs: run_tests
 
     steps:
       - name: apt-get install
