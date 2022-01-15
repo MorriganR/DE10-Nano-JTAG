@@ -1,7 +1,7 @@
 // iverilog -y ../main_unit -o adc_capture main_unit__adc_capture__tb.v
 // vvp adc_capture
 // gtkwave -f main_unit__adc_capture__tb.vcd
-`timescale 1ns/10ps
+`timescale 1ns/1ps
 
 module main_unit__adc_capture__tb;
 
@@ -47,6 +47,14 @@ prbs_generate adc_sdo_generate (
   .prbs( adc_sdo )
 );
 
+wire tmp_adc_sdo;
+ltc2308_bhvr ltc2308_bhvr(
+  .adc_convst( adc_convst ),//input adc_convst,
+  .adc_sck( adc_sck ),//input adc_sck,
+  .adc_sdi( adc_sdi ),//input adc_sdi,
+  .adc_sdo( tmp_adc_sdo )//output adc_sdo
+);
+
 initial begin
   $dumpfile( "main_unit__adc_capture__tb.vcd" );
   $dumpvars( 1,
@@ -78,7 +86,7 @@ initial begin
   #( PERIOD * 13 );
   adc_start = 1'b0;
   repeat ( DO_CYCLES ) @( posedge clk );
-  $finish;
+  $finish(0);
 end
 
 endmodule

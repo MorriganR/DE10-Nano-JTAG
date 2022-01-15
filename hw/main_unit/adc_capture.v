@@ -29,7 +29,7 @@ wire t_conv;    // tCONV   | Conversion Time  | max 1.6 μs (256) /0001 0000 000
 
 reg [8:0] t_cyc_counter;
 always @(posedge clk) begin
-  if (start_t_cyc || (t_cyc_counter == 9'd320))
+  if (start_t_cyc || (t_cyc_counter == 9'd319))
     t_cyc_counter <= 9'b0;
   else
     t_cyc_counter <= t_cyc_counter + 1'b1;
@@ -49,7 +49,7 @@ or after the conversion ends.*/
 always @(posedge clk) begin
   if (t_cyc_counter == 8'd1)
     adc_convst <= 1'b1;
-  else if (t_cyc_counter == 8'd8)
+  else if (t_cyc_counter == 8'd7)
     adc_convst <= 1'b0;
 end
 
