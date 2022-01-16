@@ -15,8 +15,10 @@ jobs:
     steps:
       - name: apt-get install
         run: |
+          cd ../
           pwd
-          sudo apt-get update && sudo apt install -y make g++ git bison flex gperf libreadline-dev autoconf
+          ls -la
+          sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf
           git clone https://github.com/steveicarus/iverilog.git
           cd iverilog
           autoconf
@@ -32,13 +34,12 @@ jobs:
           pwd
           cd hw
           python3 -m unittest discover -v -s "./tb" -p "*_test.py"
-          cd /home/runner/work/DE10-Nano-JTAG/DE10-Nano-JTAG/hw/tb/
+          cd /home/runner/work/DE10-Nano-JTAG/DE10-Nano-JTAG/hw/
           pwd
-          cp main_unit__adc_capture__tb.vcd bkp.vcd
           ls -la
-          iverilog -y ../main_unit -o adc_capture main_unit__adc_capture__tb.v
-          vvp adc_capture
-          diff <(sed -e '2d' main_unit__adc_capture__tb.vcd) <(sed -e '2d' bkp.vcd)
+          iverilog -y./tb -y./main_unit -o ./tb/adc_capture ./tb/main_unit__adc_capture__tb.v
+          vvp ./tb/adc_capture
+#          diff <(sed -e '2d' main_unit__adc_capture__tb.vcd) <(sed -e '2d' bkp.vcd)
 
 
   build-tutorials-job:
