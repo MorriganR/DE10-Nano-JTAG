@@ -48,9 +48,7 @@ prbs_generate adc_sdo_generate (
 );
 
 wire tmp_adc_sdo;
-ltc2308_bhvr #(
-  .tWHCONV_MAX( `tWHCONV_MAX )
-) ltc2308_bhvr (
+ltc2308 ltc2308 (
   .adc_convst( adc_convst ),//input adc_convst,
   .adc_sck( adc_sck ),//input adc_sck,
   .adc_sdi( adc_sdi ),//input adc_sdi,
@@ -58,7 +56,7 @@ ltc2308_bhvr #(
 );
 
 initial begin
-  $dumpfile( "main_unit__adc_capture__tb.vcd" );
+  $dumpfile( "./tb/main_unit__adc_capture__tb.vcd" );
   $dumpvars( 1,
     adc_convst,
     adc_sck,

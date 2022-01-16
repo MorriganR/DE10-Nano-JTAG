@@ -1,12 +1,12 @@
 `timescale 1ps/1ps
 
-module ltc2308_bhvr #(
+module ltc2308 #(
 // SYMBOL     | PARAMETER                             | MIN TYP MAX | UNITS
 // fSMPL(MAX) | Maximum Sampling Frequency            |         500 | kHz
 // fSCK       | Shift Clock Frequency                 |         40  | MHz
 parameter tWCLK = 25_000,
 // tWHCONV    | CONVST High Time                      | 20          | ns
-parameter tWHCONV = 20_000,
+parameter tWHCONV_MIN = 20_000,
 parameter tWHCONV_MAX = 40_000,
 // tHD        | Hold Time SDI After SCK↑              | 2.5         | ns
 // tSUDI      | Setup Time SDI Valid Before SCK↑      | 0           | ns
@@ -90,9 +90,9 @@ end
 
 // checking tWHCONV
 always @( adc_convst_n ) begin
-  if ( ( $time - adc_convst_tpos < tWHCONV ) || ( $time - adc_convst_tpos > tWHCONV_MAX ) ) begin
+  if ( ( $time != 0 ) && ( ( $time - adc_convst_tpos < tWHCONV_MIN ) || ( $time - adc_convst_tpos > tWHCONV_MAX ) ) ) begin
     $display( "time = %t, tWHCONV = %t (should be more than %t & less then %t)",
-        $time, $time - adc_convst_tpos, tWHCONV, tWHCONV_MAX );
+        $time, $time - adc_convst_tpos, tWHCONV_MIN, tWHCONV_MAX );
     $fatal(2);
   end
 end

@@ -21,6 +21,9 @@ jobs:
 
       - name: DRAFT Run TB
         run: |
+          pwd
+          cd hw
+          python3 -m unittest discover -v -s "./tb" -p "*_test.py"
           cd /home/runner/work/DE10-Nano-JTAG/DE10-Nano-JTAG/hw/tb/
           pwd
           cp main_unit__adc_capture__tb.vcd bkp.vcd
