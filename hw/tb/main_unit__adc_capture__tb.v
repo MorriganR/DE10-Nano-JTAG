@@ -48,7 +48,9 @@ prbs_generate adc_sdo_generate (
 );
 
 wire tmp_adc_sdo;
-ltc2308_bhvr ltc2308_bhvr(
+ltc2308_bhvr #(
+  .tWHCONV_MAX( `tWHCONV_MAX )
+) ltc2308_bhvr (
   .adc_convst( adc_convst ),//input adc_convst,
   .adc_sck( adc_sck ),//input adc_sck,
   .adc_sdi( adc_sdi ),//input adc_sdi,
