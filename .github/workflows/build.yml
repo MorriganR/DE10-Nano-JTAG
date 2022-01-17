@@ -13,24 +13,40 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+      - name: cache iverilog ccache
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/.ccache
+          key: iverilog-ccache-${{ github.head_ref }}
+          restore-keys: |
+            iverilog-ccache-${{ github.head_ref }}
+            iverilog-ccache-
+
       - name: apt-get install
         run: |
           echo $HOME
           cd ../
           pwd
           ls -la
+          echo "::group::AptGet"
           sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf ccache
+          echo "::endgroup::"
           ccache -V
+          ccache -M 500M
           ls -la /usr/lib/ccache || :
           ls -la /usr/lib64/ccache || :
           export PATH="/usr/lib/ccache:$PATH"
           ccache -s
+          cat /home/runner/.ccache/ccache.conf || :
+          ccache -z
+          echo "::group::GetMakeInstall"
           git clone https://github.com/steveicarus/iverilog.git
           cd iverilog
           autoconf
           ./configure
           make check
           sudo make install
+          echo "::endgroup::"
           ccache -s
 #          sudo apt-get update && sudo apt-get install -y iverilog
       - name: Checkout
