@@ -31,6 +31,7 @@ jobs:
           export PATH="/usr/lib/ccache:$PATH"
           ccache -z
           echo "::group::InstallIverilog"
+          cd ../
           git clone https://github.com/steveicarus/iverilog.git
           cd iverilog
           autoconf
