@@ -17,9 +17,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/.ccache
-          key: iverilog-ccache-${{ github.head_ref }}-${{ github.sha }}
+          key: iverilog-ccache-${{ github.sha }}
           restore-keys: |
-            iverilog-ccache-${{ github.head_ref }}-
+            iverilog-ccache-${{ github.sha }}
             iverilog-ccache-
 
       - name: apt-get install
