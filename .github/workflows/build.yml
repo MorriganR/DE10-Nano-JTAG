@@ -33,8 +33,6 @@ jobs:
           echo "::endgroup::"
           ccache -V
           ccache -M 500M
-          ls -la /usr/lib/ccache || :
-          ls -la /usr/lib64/ccache || :
           export PATH="/usr/lib/ccache:$PATH"
           ccache -s
           cat /home/runner/.ccache/ccache.conf || :
@@ -48,7 +46,7 @@ jobs:
           sudo make install
           echo "::endgroup::"
           ccache -s
-#          sudo apt-get update && sudo apt-get install -y iverilog
+
       - name: Checkout
         uses: actions/checkout@v2
 
