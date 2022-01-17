@@ -17,27 +17,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /home/runner/.ccache
-          key: iverilog-ccache-${{ github.head_ref }}
+          key: iverilog-ccache-${{ github.head_ref }}-${{ github.sha }}
           restore-keys: |
-            iverilog-ccache-${{ github.head_ref }}
+            iverilog-ccache-${{ github.head_ref }}-
             iverilog-ccache-
 
       - name: apt-get install
         run: |
-          echo $HOME
-          cd ../
-          pwd
-          ls -la
           echo "::group::AptGet"
           sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf ccache
           echo "::endgroup::"
-          ccache -V
           ccache -M 500M
           export PATH="/usr/lib/ccache:$PATH"
-          ccache -s
-          cat /home/runner/.ccache/ccache.conf || :
           ccache -z
-          echo "::group::GetMakeInstall"
+          echo "::group::InstallIverilog"
           git clone https://github.com/steveicarus/iverilog.git
           cd iverilog
           autoconf
