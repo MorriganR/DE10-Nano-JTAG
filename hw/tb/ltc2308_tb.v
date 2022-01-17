@@ -21,6 +21,11 @@ ltc2308 ltc2308 (
 `endif
 
 initial begin
+  $dumpfile( "./tb/ltc2308_tb.vcd" );
+  $dumpvars;
+end
+
+initial begin
   adc_convst = 1'b0;
   adc_sck = 1'b0;
   adc_sdi = 1'b0;

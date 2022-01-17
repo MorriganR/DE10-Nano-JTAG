@@ -26,6 +26,17 @@ class ltc2308(unittest.TestCase):
     self.assertEqual(os.system(iverilog.format("-DtWHCONV_MAX=25_000", "5")), NOT_FATAL)
     self.assertNotEqual(os.system(vvp.format("5")), NOT_FATAL)
 
+  @classmethod
+  def tearDownClass(cls):
+    dir_name = "./tb/"
+    test = os.listdir(dir_name)
+
+    for item in test:
+      if (item.endswith(".vvp") or item.endswith(".vcd")) and (item.startswith("ltc2308_tb")):
+        os.remove(os.path.join(dir_name, item))
+
+    os.system(iverilog.format("", ""))
+    os.system(vvp.format(""))
 
 if __name__ == '__main__':
   unittest.main()
