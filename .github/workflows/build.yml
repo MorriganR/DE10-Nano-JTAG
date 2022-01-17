@@ -8,6 +8,55 @@ on:
   workflow_dispatch:
 
 jobs:
+  run-tests:
+    name: DRAFT Run TB with Icarus Verilog
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: cache iverilog ccache
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/.ccache
+          key: iverilog-ccache-${{ github.head_ref }}-${{ github.sha }}
+          restore-keys: |
+            iverilog-ccache-${{ github.head_ref }}-
+            iverilog-ccache-
+
+      - name: apt-get install
+        run: |
+          echo "::group::AptGet"
+          sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf ccache
+          echo "::endgroup::"
+          ccache -M 500M
+          export PATH="/usr/lib/ccache:$PATH"
+          ccache -z
+          echo "::group::InstallIverilog"
+          cd ../
+          git clone https://github.com/steveicarus/iverilog.git
+          cd iverilog
+          autoconf
+          ./configure
+          make check
+          sudo make install
+          echo "::endgroup::"
+          ccache -s
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: DRAFT Run TB
+        run: |
+          pwd
+          cd hw
+          python3 -m unittest discover -v -s "./tb" -p "*_test.py"
+          cd /home/runner/work/DE10-Nano-JTAG/DE10-Nano-JTAG/hw/
+          pwd
+          ls -la
+          iverilog -y./tb -y./main_unit -o ./tb/adc_capture ./tb/main_unit__adc_capture__tb.v
+          vvp ./tb/adc_capture
+#          diff <(sed -e '2d' main_unit__adc_capture__tb.vcd) <(sed -e '2d' bkp.vcd)
+
+
   build-tutorials-job:
     name: Build ${{matrix.example}} with Quartus-${{matrix.qver}}
     strategy:
@@ -16,6 +65,8 @@ jobs:
         example: ['DE10-Nano-JTAG']
       fail-fast: false
     runs-on: ubuntu-20.04
+    needs: run-tests
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: apt-get install

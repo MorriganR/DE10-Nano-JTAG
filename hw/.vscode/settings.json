@@ -1,0 +1,17 @@
+{
+  "editor.tabSize": 2,
+  "verilog.linting.linter": "iverilog",
+  "verilog.linting.iverilog.arguments": "-Wall -y ./tb -y ./main_unit -y ./ip/altpll -y ./ip/ram8x1024 -y ./ip/debounce -y ./ip/altsource_probe -y ./ip/edge_detect -y ./soc_system/synthesis",
+  "verilog.icarusTestbenchIncludePwd": true,
+  "verilog.icarusCompileArguments": "-y./tb -y./main_unit",
+  "verilog.gtkwaveWatchGlob": "*.vcd",
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    "./tb",
+    "-p",
+    "*_test.py"
+  ],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": true
+}
