@@ -65,7 +65,7 @@ initial begin
     put_adc_sdi <= {1'b1, i[2:0], 2'b00};
     #( 2_000 - 30 );
   end
-  $finish;
+  $finish(0);
 end
 
 // generate: adc_sck, adc_sdi; collect: adc_sdo
