@@ -41,6 +41,12 @@ ltc2308 ltc2308 (
 `ifdef tWHCONV_MAX
   defparam ltc2308.tWHCONV_MAX = `tWHCONV_MAX;
 `endif
+`ifdef tWHCLK_MIN
+  defparam ltc2308.tWHCLK_MIN = `tWHCLK_MIN;
+`endif
+`ifdef tWLCLK_MIN
+  defparam ltc2308.tWLCLK_MIN = `tWLCLK_MIN;
+`endif
 
 `ifdef get_vcd
   initial begin

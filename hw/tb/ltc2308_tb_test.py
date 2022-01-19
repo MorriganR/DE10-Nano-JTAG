@@ -51,6 +51,36 @@ class ltc2308(unittest.TestCase):
     self.assertEqual(os.system(iverilog.format("-D tWHCONV_MAX=29_999")), NOT_FATAL)
     self.assertNotEqual(os.system(vvp), NOT_FATAL)
 
+  def test_tWHCLK_MIN(self):
+    # in ltc2308_tb.v: tWHCLK(SCK_POS_TIME) = 15_000
+
+    # tWHCONV > tWHCLK_MIN => test - PASS
+    self.assertEqual(os.system(iverilog.format("-D tWHCLK_MIN=10_000")), NOT_FATAL)
+    self.assertEqual(os.system(vvp), NOT_FATAL)
+
+    # tWHCONV == tWHCLK_MIN => test - PASS
+    self.assertEqual(os.system(iverilog.format("-D tWHCLK_MIN=15_000")), NOT_FATAL)
+    self.assertEqual(os.system(vvp), NOT_FATAL)
+
+    # tWHCONV < tWHCLK_MIN => test - FAIL
+    self.assertEqual(os.system(iverilog.format("-D tWHCLK_MIN=15_001")), NOT_FATAL)
+    self.assertNotEqual(os.system(vvp), NOT_FATAL)
+
+  def test_tWLCLK_MIN(self):
+    # in ltc2308_tb.v: tWLCLK(SCK_NEG_TIME) = 10_000
+
+    # tWHCONV > tWLCLK_MIN => test - PASS
+    self.assertEqual(os.system(iverilog.format("-D tWLCLK_MIN=9_000")), NOT_FATAL)
+    self.assertEqual(os.system(vvp), NOT_FATAL)
+
+    # tWHCONV == tWLCLK_MIN => test - PASS
+    self.assertEqual(os.system(iverilog.format("-D tWLCLK_MIN=10_000")), NOT_FATAL)
+    self.assertEqual(os.system(vvp), NOT_FATAL)
+
+    # tWHCONV < tWLCLK_MIN => test - FAIL
+    self.assertEqual(os.system(iverilog.format("-D tWLCLK_MIN=10_001")), NOT_FATAL)
+    self.assertNotEqual(os.system(vvp), NOT_FATAL)
+
   @classmethod
   def tearDownClass(cls):
     dir_name = "./tb/"

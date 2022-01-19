@@ -1,3 +1,4 @@
+// TODO DRAFT
 `timescale 1ps/1ps
 
 module ltc2308 #(
@@ -11,9 +12,9 @@ parameter tWHCONV_MAX = 40_000,
 // tHD        | Hold Time SDI After SCK↑              | 2.5         | ns
 // tSUDI      | Setup Time SDI Valid Before SCK↑      | 0           | ns
 // tWHCLK     | SCK High Time                         | 10          | ns
-parameter tWHCLK = 10_000,
+parameter tWHCLK_MIN = 10_000,
 // tWLCLK     | SCK Low Time                          | 10          | ns
-parameter tWLCLK = 10_000,
+parameter tWLCLK_MIN = 10_000,
 // tWLCONVST  | CONVST Low Time During Data Transfer  | 410         | ns
 // tHCONVST   | Hold Time CONVST Low After Last SCK↓  | 20          | ns
 // tCONV      | Conversion Time                       |     1.3 1.6 | µs
@@ -126,18 +127,18 @@ end
 // checking tWLCLK, tWCLK (adc_sck: pos to pos time)
 always @( adc_sck_p ) begin
   if ( ( adc_sck_tneg != 0 ) && ( adc_sck_tpos != 0 ) &&
-        ( ( $time - adc_sck_tneg < tWLCLK ) || ( $time - adc_sck_tpos < tWCLK_MIN ) ) ) begin
+        ( ( $time - adc_sck_tneg < tWLCLK_MIN ) || ( $time - adc_sck_tpos < tWCLK_MIN ) ) ) begin
     $display( "time = %t, tWLCLK = %t (should be more than %t), tWCLK = %t (should be more than %t)",
-        $time, $time - adc_sck_tneg, tWLCLK, $time - adc_sck_tpos, tWCLK_MIN );
+        $time, $time - adc_sck_tneg, tWLCLK_MIN, $time - adc_sck_tpos, tWCLK_MIN );
     $fatal(2);
   end
 end
 // checking tWHCLK, tWCLK (adc_sck: neg to neg time)
 always @( adc_sck_n ) begin
   if ( ( adc_sck_tneg != 0 ) && ( adc_sck_tpos != 0 ) &&
-        ( ( $time - adc_sck_tpos < tWHCLK ) || ( $time - adc_sck_tneg < tWCLK_MIN ) ) ) begin
+        ( ( $time - adc_sck_tpos < tWHCLK_MIN ) || ( $time - adc_sck_tneg < tWCLK_MIN ) ) ) begin
     $display( "time = %t, tWHCLK = %t (should be more than %t), tWCLK = %t (should be more than %t)",
-        $time, $time - adc_sck_tpos, tWHCLK, $time - adc_sck_tneg, tWCLK_MIN );
+        $time, $time - adc_sck_tpos, tWHCLK_MIN, $time - adc_sck_tneg, tWCLK_MIN );
     $fatal(2);
   end
 end
