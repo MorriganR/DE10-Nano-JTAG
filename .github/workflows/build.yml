@@ -11,24 +11,29 @@ jobs:
   run-tests:
     name: DRAFT Run TB with Icarus Verilog
     runs-on: ubuntu-20.04
-
+    env:
+      CCACHE_DIR: /home/runner/ccache
+      CCACHE_TEMPDIR: /home/runner/ccachetmp
     steps:
       - name: cache iverilog ccache
         uses: actions/cache@v2
         with:
-          path: /home/runner/.ccache
-          key: iverilog-ccache-${{ github.sha }}
+          path: ${{ env.CCACHE_DIR }}
+          key: ccashe-iverilog-${{ github.sha }}
           restore-keys: |
-            iverilog-ccache-${{ github.sha }}
-            iverilog-ccache-
+            ccashe-iverilog-${{ github.sha }}
+            ccashe-iverilog-
 
       - name: apt-get install
         run: |
           echo "::group::AptGet"
           sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf ccache
           echo "::endgroup::"
+          mkdir -p ${{ env.CCACHE_DIR }}
+          mkdir -p ${{ env.CCACHE_TEMPDIR }}
           ccache -M 500M
           export PATH="/usr/lib/ccache:$PATH"
+          ccache -s
           ccache -z
           echo "::group::InstallIverilog"
           cd ../
