@@ -21,7 +21,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y make g++ git bison flex gperf libreadline-dev autoconf ccache
           echo "::endgroup::"
           mkdir -p /home/runner/work/iverilog
-          sudo mount -t tmpfs -o size=2048M tmpfs /home/runner/work/iverilog
+          sudo mount -t tmpfs -o size=1024M tmpfs /home/runner/work/iverilog
           cd /home/runner/work/iverilog
           git clone https://github.com/steveicarus/iverilog.git --single-branch
           df -h
