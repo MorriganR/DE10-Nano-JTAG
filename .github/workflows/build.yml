@@ -24,6 +24,7 @@ jobs:
           sudo mount -t tmpfs -o size=2048M tmpfs /home/runner/work/iverilog
           cd /home/runner/work/iverilog
           git clone https://github.com/steveicarus/iverilog.git --single-branch
+          df -h
 
       - name: iverilog ccache
         uses: actions/cache@v2
@@ -36,6 +37,7 @@ jobs:
 
       - name: install iverilog
         run: |
+          df -h
           mkdir -p ${{ env.CCACHE_DIR }}
           mkdir -p ${{ env.CCACHE_TEMPDIR }}
           ccache -M 500M
@@ -50,6 +52,7 @@ jobs:
           sudo make install
           echo "::endgroup::"
           ccache -s
+          df -h
 
       - name: Checkout
         uses: actions/checkout@v2
