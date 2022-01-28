@@ -694,5 +694,4 @@ set_global_assignment -name QIP_FILE ip/altsource_probe/hps_reset.qip
 set_global_assignment -name QIP_FILE soc_system/synthesis/soc_system.qip
 set_global_assignment -name QIP_FILE ip/altpll/pll_jtag.qip
 set_global_assignment -name SIP_FILE ip/altpll/pll_jtag.sip
-set_global_assignment -name QIP_FILE ip/ram8x1024/ram8x1024.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
