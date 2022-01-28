@@ -24,16 +24,18 @@ jobs:
           sudo mount -t tmpfs -o size=1024M tmpfs /home/runner/work/iverilog
           cd /home/runner/work/iverilog
           git clone https://github.com/steveicarus/iverilog.git --single-branch
+          cd iverilog
+          echo "IVERILOG_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           df -h
 
       - name: iverilog ccache
         uses: actions/cache@v2
         with:
           path: ${{ env.CCACHE_DIR }}
-          key: ccashe-iverilog-${{ github.sha }}
+          key: ccache-iverilog-${{ env.IVERILOG_SHA }}
           restore-keys: |
-            ccashe-iverilog-${{ github.sha }}
-            ccashe-iverilog-
+            ccache-iverilog-${{ env.IVERILOG_SHA }}
+            ccache-iverilog-
 
       - name: install iverilog
         run: |
