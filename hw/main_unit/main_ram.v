@@ -1,6 +1,5 @@
 // main_ram.v
 
-// `timescale 1 ps / 1 ps
 module main_ram (
   input  wire         clk,            // clock.clk
   input  wire         reset,          // reset.reset
@@ -18,6 +17,9 @@ module main_ram (
   output reg   [31:0] tdi_delay,      //          .tdi_delay
   output reg   [31:0] tdo_delay,      //          .tdo_delay
 
+  output reg   [31:0] vector_start,
+  output reg   [31:0] vector_end,
+  output reg   [31:0] vector_number_repeat,
   output reg   [31:0] adc_start_delay,
   output reg   [31:0] adc_config_odd,
   output reg   [31:0] adc_config_even,
@@ -110,16 +112,19 @@ adc_ram adc_ram(
 );
 
 always @(posedge clk) begin
-  if ( !ram_cs && write ) begin
-    case (address[2:0])
-      3'b000 : tck_width[31:0] <= writedata[31:0];
-      3'b001 : tck_delay[31:0] <= writedata[31:0];
-      3'b010 : tms_delay[31:0] <= writedata[31:0];
-      3'b011 : tdi_delay[31:0] <= writedata[31:0];
-      3'b100 : tdo_delay[31:0] <= writedata[31:0];
-      3'b101 : adc_start_delay[31:0] <= writedata[31:0];
-      3'b110 : adc_config_odd[31:0] <= writedata[31:0];
-      3'b111 : adc_config_even[31:0] <= writedata[31:0];
+  if ( chipselect && !ram_cs && write ) begin
+    case (address[3:0])
+      4'b0000 : tck_width[31:0] <= writedata[31:0];
+      4'b0001 : tck_delay[31:0] <= writedata[31:0];
+      4'b0010 : tms_delay[31:0] <= writedata[31:0];
+      4'b0011 : tdi_delay[31:0] <= writedata[31:0];
+      4'b0100 : tdo_delay[31:0] <= writedata[31:0];
+      4'b0101 : adc_start_delay[31:0] <= writedata[31:0];
+      4'b0110 : adc_config_odd[31:0] <= writedata[31:0];
+      4'b0111 : adc_config_even[31:0] <= writedata[31:0];
+      4'b1000 : vector_start[31:0] <= writedata[31:0];
+      4'b1001 : vector_end[31:0] <= writedata[31:0];
+      4'b1010 : vector_number_repeat[31:0] <= writedata[31:0];
       default: tck_width[31:0] <= writedata[31:0];
     endcase
   end

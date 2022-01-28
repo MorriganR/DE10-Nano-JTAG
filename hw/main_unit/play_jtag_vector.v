@@ -12,9 +12,9 @@ module play_jtag_vector #(
   output reg data_ready,
   output wait_state,
 
-  input [15:0] vector_start,
-  input [15:0] vector_end,
-  input [15:0] vector_number_repeat,
+  input [31:0] vector_start,
+  input [31:0] vector_end,
+  input [31:0] vector_number_repeat,
   input [31:0] adc_start_delay,
   output adc_start,
   output adc_sequence_one,
