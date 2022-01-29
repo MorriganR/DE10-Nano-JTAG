@@ -34,6 +34,9 @@ wire [31:0] tms_delay;
 wire [31:0] tdi_delay;
 wire [31:0] tdo_delay;
 
+wire [31:0] vector_start;
+wire [31:0] vector_end;
+wire [31:0] vector_number_repeat;
 wire [31:0] adc_start_delay;
 wire [31:0] adc_config_odd;
 wire [31:0] adc_config_even;
@@ -61,6 +64,7 @@ wire [7:0] vector_2_wr_data;
 assign vector_ram_clk = clk;
 assign adc_ram_clk = clk;
 
+
 main_ram main_ram(
   .clk(cpu_clk),               //input  wire          clock.clk
   .reset(cpu_reset),          //input  wire          reset.reset
@@ -78,6 +82,9 @@ main_ram main_ram(
   .tdi_delay(tdi_delay),      //output reg   [7:0]           .tdi_delay
   .tdo_delay(tdo_delay),      //output reg   [7:0]           .tdo_delay
 
+  .vector_start(vector_start),
+  .vector_end(vector_end),
+  .vector_number_repeat(vector_number_repeat),
   .adc_start_delay(adc_start_delay),
   .adc_config_odd(adc_config_odd),
   .adc_config_even(adc_config_even),
@@ -107,9 +114,6 @@ wire [1:0] vector_data;
 wire get_next_data;
 wire data_ready;
 wire wait_state;
-wire [15:0] vector_start;
-wire [15:0] vector_end;
-wire [15:0] vector_number_repeat;
 play_jtag_vector play_jtag(
   .clk(clk),
   .vector_1_addr(vector_1_addr),

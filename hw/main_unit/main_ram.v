@@ -1,6 +1,5 @@
 // main_ram.v
 
-// `timescale 1 ps / 1 ps
 module main_ram (
   input  wire         clk,            // clock.clk
   input  wire         reset,          // reset.reset
@@ -18,6 +17,9 @@ module main_ram (
   output reg   [31:0] tdi_delay,      //          .tdi_delay
   output reg   [31:0] tdo_delay,      //          .tdo_delay
 
+  output reg   [31:0] vector_start,
+  output reg   [31:0] vector_end,
+  output reg   [31:0] vector_number_repeat,
   output reg   [31:0] adc_start_delay,
   output reg   [31:0] adc_config_odd,
   output reg   [31:0] adc_config_even,
@@ -110,16 +112,19 @@ adc_ram adc_ram(
 );
 
 always @(posedge clk) begin
-  if ( !ram_cs && write ) begin
-    case (address[2:0])
-      3'b000 : tck_width[31:0] <= writedata[31:0];
-      3'b001 : tck_delay[31:0] <= writedata[31:0];
-      3'b010 : tms_delay[31:0] <= writedata[31:0];
-      3'b011 : tdi_delay[31:0] <= writedata[31:0];
-      3'b100 : tdo_delay[31:0] <= writedata[31:0];
-      3'b101 : adc_start_delay[31:0] <= writedata[31:0];
-      3'b110 : adc_config_odd[31:0] <= writedata[31:0];
-      3'b111 : adc_config_even[31:0] <= writedata[31:0];
+  if ( chipselect && !ram_cs && write ) begin
+    case (address[3:0])
+      4'b0000 : tck_width[31:0] <= writedata[31:0];
+      4'b0001 : tck_delay[31:0] <= writedata[31:0];
+      4'b0010 : tms_delay[31:0] <= writedata[31:0];
+      4'b0011 : tdi_delay[31:0] <= writedata[31:0];
+      4'b0100 : tdo_delay[31:0] <= writedata[31:0];
+      4'b0101 : adc_start_delay[31:0] <= writedata[31:0];
+      4'b0110 : adc_config_odd[31:0] <= writedata[31:0];
+      4'b0111 : adc_config_even[31:0] <= writedata[31:0];
+      4'b1000 : vector_start[31:0] <= writedata[31:0];
+      4'b1001 : vector_end[31:0] <= writedata[31:0];
+      4'b1010 : vector_number_repeat[31:0] <= writedata[31:0];
       default: tck_width[31:0] <= writedata[31:0];
     endcase
   end
@@ -215,53 +220,89 @@ module adc_ram (
   input wire   [31:0] adc_ram_wr_data
 );
 
-ram8x1024 RAM_0 (
-  .clock_a    (clk),
-  .address_a  (address),
-  .data_a     (writedata[7:0]),
-  .q_a        (readdata[7:0]),
-  .wren_a     (write && byteenable[0]),
-  .clock_b    (adc_ram_clk),
-  .address_b  (adc_ram_addr),
-  .data_b     (adc_ram_wr_data[7:0]),
-  .q_b        (adc_ram_rd_data[7:0]),
-  .wren_b     (adc_ram_we)
+  ram8x1024 RAM_0 (
+    .clock_a    (clk),
+    .address_a  (address),
+    .data_a     (writedata[7:0]),
+    .q_a        (readdata[7:0]),
+    .wren_a     (write && byteenable[0]),
+    .clock_b    (adc_ram_clk),
+    .address_b  (adc_ram_addr),
+    .data_b     (adc_ram_wr_data[7:0]),
+    .q_b        (adc_ram_rd_data[7:0]),
+    .wren_b     (adc_ram_we)
+  );
+  ram8x1024 RAM_1 (
+    .clock_a    (clk),
+    .address_a  (address),
+    .data_a     (writedata[15:8]),
+    .q_a        (readdata[15:8]),
+    .wren_a     (write && byteenable[1]),
+    .clock_b    (adc_ram_clk),
+    .address_b  (adc_ram_addr),
+    .data_b     (adc_ram_wr_data[15:8]),
+    .q_b        (adc_ram_rd_data[15:8]),
+    .wren_b     (adc_ram_we)
+  );
+  ram8x1024 RAM_2 (
+    .clock_a    (clk),
+    .address_a  (address),
+    .data_a     (writedata[23:16]),
+    .q_a        (readdata[23:16]),
+    .wren_a     (write && byteenable[2]),
+    .clock_b    (adc_ram_clk),
+    .address_b  (adc_ram_addr),
+    .data_b     (adc_ram_wr_data[23:16]),
+    .q_b        (adc_ram_rd_data[23:16]),
+    .wren_b     (adc_ram_we)
+  );
+  ram8x1024 RAM_3 (
+    .clock_a    (clk),
+    .address_a  (address),
+    .data_a     (writedata[31:24]),
+    .q_a        (readdata[31:24]),
+    .wren_a     (write && byteenable[3]),
+    .clock_b    (adc_ram_clk),
+    .address_b  (adc_ram_addr),
+    .data_b     (adc_ram_wr_data[31:24]),
+    .q_b        (adc_ram_rd_data[31:24]),
+    .wren_b     (adc_ram_we)
+  );
+
+endmodule
+
+
+module ram8x1024(
+  input clock_a,
+  input [9:0] address_a,
+  input [7:0] data_a,
+  output reg [7:0] q_a,
+  input wren_a,
+  input clock_b,
+  input [9:0] address_b,
+  input [7:0] data_b,
+  output reg [7:0] q_b,
+  input wren_b
 );
-ram8x1024 RAM_1 (
-  .clock_a    (clk),
-  .address_a  (address),
-  .data_a     (writedata[15:8]),
-  .q_a        (readdata[15:8]),
-  .wren_a     (write && byteenable[1]),
-  .clock_b    (adc_ram_clk),
-  .address_b  (adc_ram_addr),
-  .data_b     (adc_ram_wr_data[15:8]),
-  .q_b        (adc_ram_rd_data[15:8]),
-  .wren_b     (adc_ram_we)
-);
-ram8x1024 RAM_2 (
-  .clock_a    (clk),
-  .address_a  (address),
-  .data_a     (writedata[23:16]),
-  .q_a        (readdata[23:16]),
-  .wren_a     (write && byteenable[2]),
-  .clock_b    (adc_ram_clk),
-  .address_b  (adc_ram_addr),
-  .data_b     (adc_ram_wr_data[23:16]),
-  .q_b        (adc_ram_rd_data[23:16]),
-  .wren_b     (adc_ram_we)
-);
-ram8x1024 RAM_3 (
-  .clock_a    (clk),
-  .address_a  (address),
-  .data_a     (writedata[31:24]),
-  .q_a        (readdata[31:24]),
-  .wren_a     (write && byteenable[3]),
-  .clock_b    (adc_ram_clk),
-  .address_b  (adc_ram_addr),
-  .data_b     (adc_ram_wr_data[31:24]),
-  .q_b        (adc_ram_rd_data[31:24]),
-  .wren_b     (adc_ram_we)
-);
+
+  reg [7:0] ram[1023:0];
+
+  always @(posedge clock_a) begin
+    if (wren_a) begin
+      ram[address_a] <= data_a;
+      q_a <= data_a;
+    end else begin
+      q_a <= ram[address_a];
+    end
+  end
+
+  always @(posedge clock_b) begin
+    if (wren_b) begin
+      ram[address_b] <= data_b;
+      q_b <= data_b;
+    end else begin
+      q_b <= ram[address_b];
+    end
+  end
 
 endmodule
